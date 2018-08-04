@@ -59,17 +59,23 @@ public class BookCaseController {
         BookCaseEntity bookCase = new BookCaseEntity();
         bookCase.setUid(uid);
         bookCase.setType(type);
+        System.out.println(nid);
+        System.out.println(uid);
+        System.out.println(type);
 
         Long bid = bookCaseService.getBookCase(bookCase).getBid();
 
+        System.out.println(bid);
         Map<String, Object> map = new HashMap<>();
         map.put("bid", bid);
         map.put("nid", nid);
 
         if (bookCaseService.isNovelInBookcase(map) == null) {
+            System.out.println("none");
             bookCaseService.addNovelToBookcase(map);
             return new ResponseEntity("加入成功");
         } else {
+            System.out.println("not none");
             return new ResponseEntity(400, "已存在于书架", null);
         }
     }

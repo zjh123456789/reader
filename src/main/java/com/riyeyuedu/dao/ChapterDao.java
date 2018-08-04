@@ -32,6 +32,10 @@ public class ChapterDao {
         return sqlSession.selectOne("chapter.getChapterByCid", cid);
     }
 
+    public ChapterEntity getChapterInfoByCid(SqlSession sqlSession, Long cid) {
+        return sqlSession.selectOne("chapter.getChapterInfoByCid", cid);
+    }
+
     public ChapterEntity getDraftByCid(SqlSession sqlSession, Long cid){
         return sqlSession.selectOne("chapter.getDraftByCid", cid);
     }
@@ -53,6 +57,10 @@ public class ChapterDao {
         return updateNum == 1;
     }
 
+    public List<ChapterEntity> getChapterDraftInfo(SqlSession sqlSession, Long nid) {
+        return sqlSession.selectList("chapter.getChapterDraftInfo", nid);
+    }
+
     public List<ChapterEntity> getChapterInfo(SqlSession sqlSession, Long nid) {
         return sqlSession.selectList("chapter.getChapterInfo", nid);
     }
@@ -70,5 +78,10 @@ public class ChapterDao {
     public boolean deleteDraft(SqlSession sqlSession, Long cid) {
         int updateNum = sqlSession.update("chapter.deleteDraft", cid);
         return updateNum == 1;
+    }
+
+    public boolean deleteChapter(SqlSession sqlSession, Long cid) {
+        int deleteNum = sqlSession.delete("chapter.deleteChapter", cid);
+        return deleteNum == 1;
     }
 }

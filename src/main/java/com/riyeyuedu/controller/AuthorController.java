@@ -52,17 +52,26 @@ public class AuthorController {
         return new ResponseEntity(200, "success", novelService.getNovelByUid(uid));
     }
 
-    @RequestMapping(value = "/author/chapter/{nid}")
+    @RequestMapping(value = "/author/chapterDraft/{nid}")
     @CrossOrigin
-    public ResponseEntity getChapters(@PathVariable("nid") Long nid) {
+    public ResponseEntity getChaptersDraft(@PathVariable("nid") Long nid) {
+        return new ResponseEntity(200, "success", chapterService.getChapterDraftInfo(nid));
+    }
+
+    @RequestMapping(value = "/author/chapterInfo/{nid}")
+    @CrossOrigin
+    public ResponseEntity getChapterInfo(@PathVariable("nid") Long nid) {
         return new ResponseEntity(200, "success", chapterService.getChapterInfo(nid));
     }
 
     @RequestMapping(value = "/author/createChapter", method = RequestMethod.POST)
     @CrossOrigin
     public ResponseEntity createChapter(@RequestBody ChapterEntity chapterEntity) {
-        chapterEntity.setCreateTime(new Date().getTime());
+        Long date = new Date().getTime();
+        chapterEntity.setCreateTime(date);
         chapterEntity.setWordNum(chapterEntity.getContent().length());
+        //System.out.println(chapterEntity.getWordNum());
+        novelService.updateUpdateTime(date);
 
         //未写后台，上传的章节暂时默认为通过审核
         chapterEntity.setAllow(1);
@@ -100,11 +109,24 @@ public class AuthorController {
         return new ResponseEntity(200, "success", chapterService.getDraftByCid(cid));
     }
 
+    @RequestMapping(value = "/author/chapter/{cid}")
+    @CrossOrigin
+    public ResponseEntity getChapterInfoByCid(@PathVariable("cid") Long cid) {
+        return new ResponseEntity(200, "success", chapterService.getChapterInfoByCid(cid));
+    }
+
     @RequestMapping(value = "/author/deleteDraft/{cid}")
     @CrossOrigin
     public ResponseEntity deleteDraft(@PathVariable("cid") Long cid) {
         chapterService.deleteDraft(cid);
 
+        return new ResponseEntity(200, "success", true);
+    }
+
+    @RequestMapping(value = "/author/deleteChapter/{cid}")
+    @CrossOrigin
+    public ResponseEntity deleteChapter(@PathVariable("cid") Long cid) {
+        chapterService.deleteChapter(cid);
         return new ResponseEntity(200, "success", true);
     }
 }

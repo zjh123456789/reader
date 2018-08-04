@@ -215,4 +215,12 @@ public class NovelService {
     public List<Map<String, Object>> getNovelByUid(int uid) {
         return novelDao.getNovelByUid(sqlSession, uid);
     }
+
+    public boolean updateUpdateTime(Long nid) {
+        return novelDao.updateUpdateTime(sqlSession, nid);
+    }
+
+    public boolean updateWordNum(Long nid) {
+        return novelDao.updateWordNum(sqlSession, nid);
+    }
 }

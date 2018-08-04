@@ -547,6 +547,14 @@
         UPDATE novel SET score = #{score} WHERE nid = #{nid}
     </update>
 
+    <update id="updateUpdateTime">
+        update novel set update_time = #{updateTime} where nid = #{nid}
+    </update>
+
+    <update id="updateWordNum">
+        update novel set word_num = #{wordNum} where nid = #{nid}
+    </update>
+
     <resultMap id="novelResultMap" type="NovelEntity" >
         <id column="nid" property="nid" jdbcType="BIGINT" />
         <result column="title" property="title" jdbcType="VARCHAR" />

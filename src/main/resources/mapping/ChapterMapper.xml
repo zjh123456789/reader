@@ -31,6 +31,10 @@
         select chapter_name, draft, cid from chapter where cid = #{cid}
     </select>
 
+    <select id="getChapterInfoByCid" resultMap="chapterResultMap">
+        select chapter_name, content, cid from chapter where cid = #{cid}
+    </select>
+
     <select id="getFirstChapter" resultMap="chapterResultMap">
         SELECT cid FROM chapter WHERE nid = #{nid} and allow = 1 ORDER BY cid ASC LIMIT 1
     </select>
@@ -49,8 +53,12 @@
         SELECT cid, nid, chapter_name, content, create_time, word_num FROM chapter WHERE allow = 0 AND nid = #{nid};
     </select>
 
-    <select id="getChapterInfo" resultMap="chapterResultMap">
+    <select id="getChapterDraftInfo" resultMap="chapterResultMap">
         select cid, chapter_name, create_time, word_num from chapter where nid = #{nid} and is_draft = 1
+    </select>
+
+    <select id="getChapterInfo" resultMap="chapterResultMap">
+        select cid, chapter_name, create_time, word_num from chapter where nid = #{nid} and allow = 1
     </select>
 
     <update id="chapterAllowed">
@@ -66,9 +74,12 @@
     </update>
 
     <update id="deleteDraft">
-        update chapter set is_draft = 0 where cid = #{cid}
+        update chapter set is_draft = 0, draft = "" where cid = #{cid}
     </update>
 
+    <delete id="deleteChapter">
+        delete from chapter where cid = #{cid}
+    </delete>
     <resultMap id="chapterResultMap" type="ChapterEntity" >
         <id column="cid" property="cid" jdbcType="BIGINT" />
         <result column="nid" property="nid" jdbcType="BIGINT" />

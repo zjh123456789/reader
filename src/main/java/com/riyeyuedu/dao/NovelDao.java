@@ -264,4 +264,14 @@ public class NovelDao {
     public List<Map<String, Object>> getNovelByUid(SqlSession sqlSession, int uid) {
         return sqlSession.selectList("novel.getNovelByUid", uid);
     }
+
+    public boolean updateUpdateTime (SqlSession sqlSession, Long nid) {
+        int updateNum = sqlSession.update("novel.updateUpdateTime", nid);
+        return updateNum == 1;
+    }
+
+    public boolean updateWordNum(SqlSession sqlSession, Long nid) {
+        int updateNum = sqlSession.update("novel.updateWordNum", nid);
+        return updateNum == 1;
+    }
 }

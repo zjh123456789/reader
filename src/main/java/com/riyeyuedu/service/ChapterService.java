@@ -43,6 +43,10 @@ public class ChapterService {
         return chapterDao.getChapterByCid(sqlSession, cid);
     }
 
+    public ChapterEntity getChapterInfoByCid(Long cid) {
+        return chapterDao.getChapterInfoByCid(sqlSession, cid);
+    }
+
     public ChapterEntity getDraftByCid(Long cid) {
         return chapterDao.getDraftByCid(sqlSession, cid);
     }
@@ -63,7 +67,11 @@ public class ChapterService {
         return chapterDao.chapterAllowed(sqlSession, chapter);
     }
 
-    public List<ChapterEntity> getChapterInfo(Long nid) { return chapterDao.getChapterInfo(sqlSession, nid); }
+    public List<ChapterEntity> getChapterDraftInfo(Long nid) { return chapterDao.getChapterDraftInfo(sqlSession, nid); }
+
+    public List<ChapterEntity> getChapterInfo(Long nid) {
+        return chapterDao.getChapterInfo(sqlSession, nid);
+    }
 
     public boolean updateDraft(ChapterEntity chapterEntity) {
         return chapterDao.updateDraft(sqlSession, chapterEntity);
@@ -75,5 +83,9 @@ public class ChapterService {
 
     public boolean deleteDraft(Long cid) {
         return chapterDao.deleteDraft(sqlSession, cid);
+    }
+
+    public boolean deleteChapter(Long cid) {
+        return chapterDao.deleteChapter(sqlSession, cid);
     }
 }
