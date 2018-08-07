@@ -61,6 +61,10 @@
         select cid, chapter_name, create_time, word_num from chapter where nid = #{nid} and allow = 1
     </select>
 
+    <select id="getChapterNum" resultType="Integer">
+        select word_num from chapter where cid = #{cid}
+    </select>
+
     <update id="chapterAllowed">
         UPDATE chapter SET allow = 1 WHERE nid = #{nid} AND cid = #{cid}
     </update>

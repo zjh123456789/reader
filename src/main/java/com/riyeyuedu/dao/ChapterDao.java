@@ -65,6 +65,10 @@ public class ChapterDao {
         return sqlSession.selectList("chapter.getChapterInfo", nid);
     }
 
+    public Integer getChapterNum(SqlSession sqlSession, Long cid) {
+        return sqlSession.selectOne("chapter.getChapterNum", cid);
+    }
+
     public boolean updateDraft(SqlSession sqlSession, ChapterEntity chapterEntity) {
         int updateNum = sqlSession.update("chapter.updateDraft", chapterEntity);
         return updateNum == 1;

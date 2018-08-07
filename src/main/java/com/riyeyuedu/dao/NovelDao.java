@@ -265,13 +265,18 @@ public class NovelDao {
         return sqlSession.selectList("novel.getNovelByUid", uid);
     }
 
-    public boolean updateUpdateTime (SqlSession sqlSession, Long nid) {
-        int updateNum = sqlSession.update("novel.updateUpdateTime", nid);
+    public boolean updateUpdateTime (SqlSession sqlSession, Map map) {
+        int updateNum = sqlSession.update("novel.updateUpdateTime", map);
         return updateNum == 1;
     }
 
-    public boolean updateWordNum(SqlSession sqlSession, Long nid) {
-        int updateNum = sqlSession.update("novel.updateWordNum", nid);
+    public boolean updateWordNum(SqlSession sqlSession, Map map) {
+        int updateNum = sqlSession.update("novel.updateWordNum", map);
+        return updateNum == 1;
+    }
+
+    public boolean updateUpdateChapter(SqlSession sqlSession, Map map) {
+        int updateNum = sqlSession.update("novel.updateUpdateChapter", map);
         return updateNum == 1;
     }
 }

@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
+import java.util.Map;
 
 @RestController
 public class AuthorController {
@@ -70,17 +71,20 @@ public class AuthorController {
         Long date = new Date().getTime();
         chapterEntity.setCreateTime(date);
         chapterEntity.setWordNum(chapterEntity.getContent().length());
-        //System.out.println(chapterEntity.getWordNum());
-        novelService.updateUpdateTime(date);
+
+        novelService.updateUpdateTime(date, chapterEntity.getNid());
 
         //未写后台，上传的章节暂时默认为通过审核
         chapterEntity.setAllow(1);
         if (chapterEntity.getCid() != null) {
+            int wordNum = chapterEntity.getWordNum() - chapterService.getChapterNum(chapterEntity.getCid());
+            novelService.updateWordNum(wordNum, chapterEntity.getNid());
             chapterService.updateContent(chapterEntity);
             return new ResponseEntity(200, "success", true);
         } else {
             chapterService.addChapter(chapterEntity);
             novelService.addChapterNum(chapterEntity.getNid());
+            novelService.updateUpdateChapter(chapterEntity.getCid(), chapterEntity.getNid());
             return new ResponseEntity(200, "success", chapterEntity.getCid());
         }
     }
@@ -126,6 +130,9 @@ public class AuthorController {
     @RequestMapping(value = "/author/deleteChapter/{cid}")
     @CrossOrigin
     public ResponseEntity deleteChapter(@PathVariable("cid") Long cid) {
+        Map<String, Object> chapterEntity = chapterService.getChapterByCid(cid);
+        novelService.updateWordNum((int)chapterEntity.get("word_num") * -1, (Long) chapterEntity.get("nid"));
+        novelService.updateUpdateChapter(null, (Long)chapterEntity.get("nid"));
         chapterService.deleteChapter(cid);
         return new ResponseEntity(200, "success", true);
     }

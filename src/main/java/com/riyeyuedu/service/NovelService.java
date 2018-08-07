@@ -216,11 +216,24 @@ public class NovelService {
         return novelDao.getNovelByUid(sqlSession, uid);
     }
 
-    public boolean updateUpdateTime(Long nid) {
-        return novelDao.updateUpdateTime(sqlSession, nid);
+    public boolean updateUpdateTime(Long date, Long nid) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("date", date);
+        map.put("nid", nid);
+        return novelDao.updateUpdateTime(sqlSession, map);
     }
 
-    public boolean updateWordNum(Long nid) {
-        return novelDao.updateWordNum(sqlSession, nid);
+    public boolean updateWordNum(int num, Long nid) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("wordNum", num);
+        map.put("nid", nid);
+        return novelDao.updateWordNum(sqlSession, map);
+    }
+
+    public boolean updateUpdateChapter(Long cid, Long nid) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("cid", cid);
+        map.put("nid", nid);
+        return  novelDao.updateUpdateChapter(sqlSession, map);
     }
 }

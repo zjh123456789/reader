@@ -3,8 +3,8 @@
 <mapper namespace="novel" >
     
     <insert id="insertNovel" parameterType="NovelEntity" useGeneratedKeys="true" keyProperty="nid">
-        INSERT INTO novel (title, uid, lid, introduction, info, score, state, create_time, update_time, word_num, click_num, recommend_num, chapter_num, cover, recent_chapter_id, allow)
-        VALUES (#{title}, #{uid}, #{lid}, #{introduction}, #{info}, #{score}, #{state}, #{createTime}, #{updateTime}, #{wordNum}, #{clickNum}, #{recommendNum}, #{chapterNum}, #{cover}, #{recentChapterId}, #{allow})
+        INSERT INTO novel (title, uid, lid, introduction, info, score, state, create_time, update_time, word_num, click_num, recommend_num, chapter_num, collect_num, cover, recent_chapter_id, allow)
+        VALUES (#{title}, #{uid}, #{lid}, #{introduction}, #{info}, #{score}, #{state}, #{createTime}, #{updateTime}, #{wordNum}, #{clickNum}, #{recommendNum}, #{chapterNum}, #{collectNum}, #{cover}, #{recentChapterId}, #{allow})
     </insert>
 
     <select id="getNovelByNid" resultType="HashMap">
@@ -552,7 +552,11 @@
     </update>
 
     <update id="updateWordNum">
-        update novel set word_num = #{wordNum} where nid = #{nid}
+        update novel set word_num = word_num + #{wordNum} where nid = #{nid}
+    </update>
+
+    <update id="updateUpdateChapter">
+        update novel set recent_chapter_id = #{cid} where nid = #{nid}
     </update>
 
     <resultMap id="novelResultMap" type="NovelEntity" >

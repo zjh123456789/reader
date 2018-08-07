@@ -73,6 +73,10 @@ public class ChapterService {
         return chapterDao.getChapterInfo(sqlSession, nid);
     }
 
+    public Integer getChapterNum(Long cid) {
+        return chapterDao.getChapterNum(sqlSession, cid);
+    }
+
     public boolean updateDraft(ChapterEntity chapterEntity) {
         return chapterDao.updateDraft(sqlSession, chapterEntity);
     }
