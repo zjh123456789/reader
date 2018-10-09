@@ -1,5 +1,6 @@
 package com.riyeyuedu.service;
 
+import com.riyeyuedu.controller.Format.IndexNovelFormat;
 import com.riyeyuedu.dao.NovelDao;
 import com.riyeyuedu.entity.BookCaseEntity;
 import com.riyeyuedu.entity.NovelEntity;
@@ -32,6 +33,10 @@ public class NovelService {
 
     public boolean addNovel(NovelEntity novel) {
         return novelDao.addNovel(sqlSession, novel);
+    }
+
+    public List<Map<String, Object>> getNovelList(IndexNovelFormat novelEntity) {
+        return novelDao.getNovelList(sqlSession, novelEntity);
     }
 
     public List<Map<String, Object>> getAllNovel(Map<String, Object> map) {
@@ -235,5 +240,16 @@ public class NovelService {
         map.put("cid", cid);
         map.put("nid", nid);
         return  novelDao.updateUpdateChapter(sqlSession, map);
+    }
+
+    public boolean updateNovelAllow(Long nid, Integer allow) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("nid", nid);
+        map.put("allow", allow);
+        return novelDao.updateNovelAllow(sqlSession, map);
+    }
+
+    public boolean deleteNovelByNid(Integer nid) {
+        return novelDao.deleteNovelByNid(sqlSession, nid);
     }
 }

@@ -4,6 +4,8 @@ import com.riyeyuedu.entity.UserEntity;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public class UserDao {
     public Boolean addUser(SqlSession sqlSession, UserEntity userEntity) {
@@ -16,12 +18,20 @@ public class UserDao {
         return updateNum == 1;
     }
 
+    public List<UserEntity> getAllUser(SqlSession sqlSession, UserEntity userEntity) {
+        return sqlSession.selectList("user.getAllUser", userEntity);
+    }
+
     public String getPortraitByUid(SqlSession sqlSession, int uid) {
         return sqlSession.selectOne("user.getPortraitByUid", uid);
     }
 
     public UserEntity getInfoByUid(SqlSession sqlSession, int uid) {
         return sqlSession.selectOne("user.getInfoByUid", uid);
+    }
+
+    public UserEntity getUser(SqlSession sqlSession, UserEntity userEntity) {
+        return sqlSession.selectOne("user.getUser", userEntity);
     }
 
     public UserEntity getUserByPhone(SqlSession sqlSession, String phone) {

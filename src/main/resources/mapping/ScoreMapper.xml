@@ -45,6 +45,10 @@
     <update id="updateScore">
         UPDATE score SET score = #{score}, content = #{content}, time = #{time} WHERE uid = #{uid} AND nid = #{nid}
     </update>
+
+    <delete id="deleteScore">
+        delete from score where score.nid = #{nid}
+    </delete>
     
     <resultMap id="ScoreResultMap" type="ScoreEntity">
         <id column="uid" property="uid" jdbcType="INTEGER"/>

@@ -1,9 +1,11 @@
 package com.riyeyuedu.dao;
 
+import com.riyeyuedu.controller.Format.IndexNovelFormat;
 import com.riyeyuedu.entity.BookCaseEntity;
 import com.riyeyuedu.entity.NovelEntity;
 import com.riyeyuedu.entity.RecordEntity;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.jdbc.SQL;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 
@@ -20,6 +22,10 @@ public class NovelDao {
     public boolean addNovel(SqlSession sqlSession, NovelEntity novel) {
         int insertNum = sqlSession.insert("novel.insertNovel", novel);
         return insertNum == 1;
+    }
+    
+    public List<Map<String, Object>> getNovelList(SqlSession sqlSession, IndexNovelFormat novelEntity) {
+        return sqlSession.selectList("getNovelList", novelEntity);
     }
 
     public Map<String, Object> getNovelByNid(SqlSession sqlSession, long nid) {
@@ -278,5 +284,15 @@ public class NovelDao {
     public boolean updateUpdateChapter(SqlSession sqlSession, Map map) {
         int updateNum = sqlSession.update("novel.updateUpdateChapter", map);
         return updateNum == 1;
+    }
+
+    public boolean updateNovelAllow(SqlSession sqlSession, Map map) {
+        int updateNum = sqlSession.update("novel.updateNovelAllow", map);
+        return updateNum == 1;
+    }
+
+    public boolean deleteNovelByNid(SqlSession sqlSession, Integer nid) {
+        int deleteNum = sqlSession.delete("novel.deleteNovelByNid", nid);
+        return deleteNum == 1;
     }
 }

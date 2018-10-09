@@ -65,6 +65,29 @@
         select word_num from chapter where cid = #{cid}
     </select>
 
+    <select id="getWillAuditChapter" resultType="HashMap">
+        select chapter.cid, chapter.chapter_name, chapter.word_num, chapter.create_time, chapter.allow, novel.nid, novel.title, user.uid, user.username
+        from chapter left join novel on chapter.nid = novel.nid
+        left join user on novel.uid = user.uid
+        <where>
+            <if test="chapterName != null">
+                chapter.chapter_name = #{chapterName}
+            </if>
+            <if test="title != null">
+                and novel.title = #{title}
+            </if>
+            <if test="username != null">
+                and user.username = #{username}
+            </if>
+            <if test="allow != null">
+                and chapter.allow = #{allow}
+            </if>
+            <if test="1 == 1">
+                and chapter.allow != 1
+            </if>
+        </where>
+    </select>
+
     <update id="chapterAllowed">
         UPDATE chapter SET allow = 1 WHERE nid = #{nid} AND cid = #{cid}
     </update>
@@ -79,6 +102,10 @@
 
     <update id="deleteDraft">
         update chapter set is_draft = 0, draft = "" where cid = #{cid}
+    </update>
+
+    <update id="updateChapterAllow">
+        update chapter set allow = #{allow} where cid = #{cid}
     </update>
 
     <delete id="deleteChapter">

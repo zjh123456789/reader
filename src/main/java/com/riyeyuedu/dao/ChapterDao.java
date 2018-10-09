@@ -1,5 +1,6 @@
 package com.riyeyuedu.dao;
 
+import com.riyeyuedu.controller.Format.IndexChapterFormat;
 import com.riyeyuedu.entity.ChapterEntity;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
@@ -69,6 +70,10 @@ public class ChapterDao {
         return sqlSession.selectOne("chapter.getChapterNum", cid);
     }
 
+    public List<Map<String, Object>> getWillAuditChapter(SqlSession sqlSession, IndexChapterFormat indexChapterFormat) {
+        return sqlSession.selectList("chapter.getWillAuditChapter", indexChapterFormat);
+    }
+
     public boolean updateDraft(SqlSession sqlSession, ChapterEntity chapterEntity) {
         int updateNum = sqlSession.update("chapter.updateDraft", chapterEntity);
         return updateNum == 1;
@@ -76,6 +81,11 @@ public class ChapterDao {
 
     public boolean updateContent(SqlSession sqlSession, ChapterEntity chapterEntity) {
         int updateNum = sqlSession.update("chapter.updateContent", chapterEntity);
+        return updateNum == 1;
+    }
+
+    public boolean updateChapterAllow(SqlSession sqlSession, Map map) {
+        int updateNum = sqlSession.update("chapter.updateChapterAllow", map);
         return updateNum == 1;
     }
 

@@ -33,5 +33,6 @@
         <mapper resource="mapping/ReviewMapper.xml"/>
         <mapper resource="mapping/UsersMapper.xml"/>
         <mapper resource="mapping/NewsMapper.xml"/>
+        <mapper resource="mapping/NoticeMapper.xml"/>
     </mappers>
 </configuration>

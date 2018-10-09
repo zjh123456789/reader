@@ -7,6 +7,25 @@
         VALUES (#{username}, #{password}, #{portrait}, #{phone}, #{permission})
     </insert>
 
+    <select id="getAllUser" resultMap="userResultMap">
+        SELECT user.uid, user.username, user.password, user.sex, user.phone, user.info, user.birthday, user.portrait, user.phone,
+        r.role_id, r.role_name
+        FROM user
+        LEFT JOIN user_role ON user.uid = user_role.user_id
+        LEFT JOIN role r ON r.role_id = user_role.role_id
+        <where>
+            <if test="username != null">
+                user.username = #{username}
+            </if>
+            <if test="sex != null">
+                and user.sex = #{sex}
+            </if>
+            <if test="phone != null">
+                and user.phone = !{phone}
+            </if>
+        </where>
+    </select>
+
     <select id="getUser" resultMap="userResultMap">
         SELECT * FROM user WHERE username = #{username} AND password = #{password}
     </select>
@@ -20,7 +39,12 @@
     </select>
 
     <select id="getUserByName" resultMap="userResultMap">
-        SELECT * FROM user WHERE username = #{username}
+        SELECT user.uid, user.username, user.password, user.sex, user.info, user.birthday, user.portrait, user.phone,
+        r.role_id, r.role_name
+        FROM user
+        LEFT JOIN user_role ON user.uid = user_role.user_id
+        LEFT JOIN role r ON r.role_id = user_role.role_id
+        WHERE username = #{username}
     </select>
 
     <select id="getUserByPhone" resultMap="userResultMap">
@@ -53,6 +77,10 @@
         <result column="info" property="info" jdbcType="VARCHAR"/>
         <result column="portrait" property="portrait" jdbcType="VARCHAR"/>
         <result column="permission" property="permission" jdbcType="INTEGER"/>
+        <collection property="roles" ofType="com.riyeyuedu.entity.RoleEntity">
+            <id column="role_id" property="id"/>
+            <result column="role_name" property="role"/>
+        </collection>
     </resultMap>
 
 </mapper>

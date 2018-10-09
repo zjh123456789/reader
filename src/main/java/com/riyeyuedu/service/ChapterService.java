@@ -1,11 +1,13 @@
 package com.riyeyuedu.service;
 
+import com.riyeyuedu.controller.Format.IndexChapterFormat;
 import com.riyeyuedu.dao.ChapterDao;
 import com.riyeyuedu.entity.ChapterEntity;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -75,6 +77,17 @@ public class ChapterService {
 
     public Integer getChapterNum(Long cid) {
         return chapterDao.getChapterNum(sqlSession, cid);
+    }
+
+    public List<Map<String, Object>> getWillAuditChapter(IndexChapterFormat indexChapterFormat) {
+        return chapterDao.getWillAuditChapter(sqlSession, indexChapterFormat);
+    }
+
+    public boolean updateChapterAllow(Long cid, Integer allow) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("cid", cid);
+        map.put("allow", allow);
+        return chapterDao.updateChapterAllow(sqlSession, map);
     }
 
     public boolean updateDraft(ChapterEntity chapterEntity) {

@@ -6,6 +6,8 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class UserService {
     private UserDao userDao;
@@ -30,6 +32,14 @@ public class UserService {
         return userDao.changePassword(sqlSession, userEntity);
     }
 
+    public UserEntity getUser(UserEntity userEntity) {
+        return userDao.getUser(sqlSession, userEntity);
+    }
+
+    public List<UserEntity> getAllUser(UserEntity userEntity) {
+        return userDao.getAllUser(sqlSession, userEntity);
+    }
+
     public String getPortraitByUid(int uid) {
         return userDao.getPortraitByUid(sqlSession, uid);
     }
@@ -46,8 +56,8 @@ public class UserService {
         return userDao.getUserByUsername(sqlSession, username);
     }
 
-    public UserEntity getReaderByName(String name) {
-        return userDao.getReaderByReaderName(sqlSession, name);
+    public UserEntity getReaderByName(String username) {
+        return userDao.getReaderByReaderName(sqlSession, username);
     }
 
     public Boolean updateAvatar(UserEntity userEntity) {

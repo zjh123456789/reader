@@ -195,6 +195,7 @@ public class NovelController {
     @RequestMapping(value = "/search", method = RequestMethod.GET)
     @CrossOrigin
     public ResponseEntity getNovelByName(@RequestParam("page") int page, @RequestParam("name") String name, @RequestParam("active") int active) {
+        System.out.println(123);
         Page pager = PageHelper.startPage(page, 10);
         Map<String, Object> map = new HashMap<>();
         Map<String, Object> map1 = new HashMap<>();

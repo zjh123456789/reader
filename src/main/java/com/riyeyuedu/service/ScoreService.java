@@ -52,4 +52,8 @@ public class ScoreService {
     }
 
     public List<Map<String, Object>> getScoreByNid(Long nid) { return scoreDao.getScoreByNid(sqlSession, nid); }
+
+    public boolean deleteScore(Long nid) {
+        return scoreDao.deleteScore(sqlSession, nid);
+    }
 }

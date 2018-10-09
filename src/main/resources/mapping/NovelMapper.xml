@@ -7,12 +7,36 @@
         VALUES (#{title}, #{uid}, #{lid}, #{introduction}, #{info}, #{score}, #{state}, #{createTime}, #{updateTime}, #{wordNum}, #{clickNum}, #{recommendNum}, #{chapterNum}, #{collectNum}, #{cover}, #{recentChapterId}, #{allow})
     </insert>
 
+    <select id="getNovelList" resultType="HashMap">
+        select novel.nid, novel.title, novel.update_time, novel.create_time, novel.state, novel.recent_chapter_id, novel.allow, user.username, user.uid, label.*, chapter.cid, chapter.chapter_name from novel
+        LEFT JOIN label ON novel.lid = label.lid
+        LEFT JOIN user ON novel.uid = user.uid
+        LEFT JOIN chapter ON novel.recent_chapter_id = chapter.cid
+        <where>
+            <if test="title != null">
+                title = #{title}
+            </if>
+            <if test="state != null">
+                AND state = #{state}
+            </if>
+            <if test="uid != null">
+                AND novel.uid = #{uid}
+            </if>
+            <if test="lid != null">
+                AND novel.lid = #{lid}
+            </if>
+            <if test="allow != null">
+                AND novel.allow = #{allow}
+            </if>
+        </where>
+    </select>
+
     <select id="getNovelByNid" resultType="HashMap">
         SELECT novel.nid, novel.title, novel.introduction, novel.info, novel.score, novel.collect_num, novel.state, novel.create_time, novel.update_time, novel.word_num, novel.click_num, novel.recommend_num, novel.chapter_num, novel.cover, novel.recent_chapter_id, novel.level, user.username, user.uid, label.*, chapter.cid, chapter.chapter_name FROM novel
         LEFT JOIN label ON novel.lid = label.lid
         LEFT JOIN user ON novel.uid = user.uid
         LEFT JOIN chapter ON novel.recent_chapter_id = chapter.cid
-        WHERE novel.nid = #{nid}
+        WHERE novel.nid = #{nid} and novel.allow != -2
     </select>
 
     <select id="getNovelByUid" resultType="HashMap">
@@ -20,11 +44,11 @@
         LEFT JOIN label ON novel.lid = label.lid
         LEFT JOIN user ON novel.uid = user.uid
         LEFT JOIN chapter ON novel.recent_chapter_id = chapter.cid
-        WHERE novel.uid = #{uid}
+        WHERE novel.uid = #{uid} and novel.allow != -2
     </select>
     
     <select id="getTitleByNid" resultType="HashMap">
-        SELECT novel.nid, novel.title, novel.cover FROM novel WHERE nid = #{nid}
+        SELECT novel.nid, novel.title, novel.cover FROM novel WHERE nid = #{nid} and novel.allow != -2
     </select>
 
     <select id="getNovelByBookName" resultType="HashMap">
@@ -32,7 +56,7 @@
         FROM novel INNER JOIN label ON novel.lid = label.lid
             INNER JOIN user ON novel.uid = user.uid
         left JOIN chapter ON novel.recent_chapter_id = chapter.cid
-        WHERE novel.title LIKE concat('%', #{bookName}, '%')
+        WHERE novel.title LIKE concat('%', #{bookName}, '%') and novel.allow != -2
     </select>
 
     <select id="getAllNovel" resultType="HashMap" parameterType="HashMap">
@@ -45,6 +69,9 @@
             </if>
             <if test="state != -1">
               AND novel.state = #{state}
+            </if>
+            <if test="1 == 1">
+                and novel.allow != -2
             </if>
         </where>
         <if test="active == 0">
@@ -62,14 +89,14 @@
     </select>
     
     <select id="getNovelByTitle" resultMap="novelResultMap">
-        SELECT * FROM novel WHERE title= #{title}
+        SELECT * FROM novel WHERE title= #{title} and novel.allow != -2
     </select>
 
     <select id="getNovelByTitleWidly" resultType="HashMap">
         SELECT novel.*, user.username, chapter.chapter_name
         FROM novel INNER JOIN user ON novel.uid = user.uid
         LEFT JOIN chapter ON novel.recent_chapter_id = chapter.cid
-        WHERE novel.title LIKE concat('%', #{key}, '%') OR novel.introduction LIKE concat('%', #{key}, '%')
+        WHERE novel.allow != -2 and novel.title LIKE concat('%', #{key}, '%') OR novel.introduction LIKE concat('%', #{key}, '%')
         <if test="active == 1">
             ORDER BY update_time desc
         </if>
@@ -85,7 +112,7 @@
         SELECT novel.*, user.username, chapter.chapter_name
         FROM novel RIGHT JOIN user ON novel.uid = user.uid
             left JOIN chapter ON novel.recent_chapter_id = chapter.cid
-        WHERE username = #{authorName}
+        WHERE username = #{authorName} and novel.allow != -2
     </select>
 
     <select id="getNovelByLidL5" resultType="HashMap">
@@ -93,7 +120,7 @@
           FROM novel RIGHT JOIN label ON novel.lid = label.lid
               INNER JOIN user ON novel.uid = user.uid
               left JOIN chapter ON novel.recent_chapter_id = chapter.cid
-          WHERE label.lid = #{lid}
+          WHERE label.lid = #{lid} and novel.allow != -2
         ORDER BY novel.click_num DESC LIMIT 5
     </select>
 
@@ -101,7 +128,7 @@
         SELECT novel.nid, novel.uid, novel.lid, novel.title, novel.info, novel.cover, novel.word_num, user.username, label.label_name
         FROM novel RIGHT JOIN label ON novel.lid = label.lid
         INNER JOIN user ON novel.uid = user.uid
-        WHERE label.lid = #{lid}
+        WHERE label.lid = #{lid} and novel.allow != -2
         ORDER BY novel.click_num DESC
     </select>
 
@@ -110,7 +137,7 @@
         FROM novel RIGHT JOIN label ON novel.lid = label.lid
         INNER JOIN user ON novel.uid = user.uid
         LEFT JOIN chapter ON novel.recent_chapter_id = chapter.cid
-        WHERE label.lid = #{lid}
+        WHERE label.lid = #{lid} and novel.allow != -2
         ORDER BY novel.update_time DESC
         LIMIT 30
     </select>
@@ -119,7 +146,7 @@
         SELECT novel.*, user.username
         FROM novel RIGHT JOIN label ON novel.lid = label.lid
         INNER JOIN user ON novel.uid = user.uid
-        WHERE label.lid = #{lid}
+        WHERE label.lid = #{lid} and novel.allow != -2
         ORDER BY novel.score DESC
         LIMIT 30
     </select>
@@ -129,6 +156,7 @@
         FROM novel INNER JOIN label ON novel.lid = label.lid
             INNER JOIN user ON novel.uid = user.uid
             LEFT JOIN chapter ON novel.recent_chapter_id = chapter.cid
+        where novel.allow != -2
         ORDER BY update_time DESC LIMIT 23
     </select>
     
@@ -137,6 +165,7 @@
         FROM novel INNER JOIN label ON novel.lid = label.lid
             INNER JOIN user ON novel.uid = user.uid
             LEFT JOIN chapter ON novel.recent_chapter_id = chapter.cid
+        where novel.allow != -2
         ORDER BY score DESC LIMIT 10
     </select>
 
@@ -144,6 +173,7 @@
         SELECT novel.nid, novel.title, user.uid, user.username, label.lid, label.label_name
         FROM novel INNER JOIN label ON novel.lid = label.lid
             INNER JOIN user ON novel.uid = user.uid
+        where novel.allow != -2
         ORDER BY score DESC
         LIMIT 17
     </select>
@@ -152,6 +182,7 @@
         SELECT novel.nid, novel.title, user.uid, user.username, label.lid, label.label_name
         FROM novel INNER JOIN label ON novel.lid = label.lid
         INNER JOIN user ON novel.uid = user.uid
+        where novel.allow != -2
         ORDER BY novel.update_time DESC
         LIMIT 17
     </select>
@@ -161,6 +192,7 @@
         FROM novel INNER JOIN label ON novel.lid = label.lid
         INNER JOIN user ON novel.uid = user.uid
         LEFT JOIN chapter ON novel.recent_chapter_id = chapter.cid
+        where novel.allow != -2
         ORDER BY score DESC
     </select>
 
@@ -169,12 +201,13 @@
         FROM novel INNER JOIN label ON novel.lid = label.lid
         INNER JOIN user ON novel.uid = user.uid
         LEFT JOIN chapter ON novel.recent_chapter_id = chapter.cid
-        WHERE label.lid = #{lid}
+        WHERE label.lid = #{lid} and novel.allow != -2
         ORDER BY score DESC
     </select>
     
     <select id="getNovelCoverByScore" resultType="String">
         SELECT cover FROM novel
+        where novel.allow != -2
         ORDER BY score DESC LIMIT 4;
     </select>
 
@@ -182,6 +215,7 @@
         SELECT novel.*, label.label_name, user.username
         FROM novel INNER JOIN label ON novel.lid = label.lid
             INNER JOIN user ON novel.uid = user.uid
+        where novel.allow != -2
         ORDER BY create_time DESC LIMIT 10
     </select>
 
@@ -190,7 +224,7 @@
         FROM novel INNER JOIN label ON novel.lid = label.lid
             INNER JOIN user ON novel.uid = user.uid
             LEFT JOIN chapter ON novel.recent_chapter_id = chapter.cid
-        WHERE state = #{state}
+        WHERE state = #{state} and novel.allow != -2
         ORDER BY novel.score DESC LIMIT 10
     </select>
 
@@ -198,6 +232,7 @@
         SELECT novel.*, user.username, label.label_name
         FROM novel INNER JOIN label ON novel.lid = label.lid
             INNER JOIN user ON novel.uid = user.uid
+        where novel.allow != -2
         ORDER BY click_num DESC
         LIMIT 10
     </select>
@@ -206,6 +241,7 @@
         SELECT novel.*, user.username, label.label_name
         FROM novel INNER JOIN label ON novel.lid = label.lid
         INNER JOIN user ON novel.uid = user.uid
+        where novel.allow != -2
         ORDER BY recommend_num DESC LIMIT 10
     </select>
 
@@ -217,7 +253,7 @@
             LEFT JOIN chapter ON novel.recent_chapter_id = chapter.cid
             LEFT JOIN user ON novel.uid = user.uid
             LEFT JOIN label ON novel.lid = label.lid
-        WHERE bookcase.uid = #{uid} AND bookcase.type = #{type}
+        WHERE bookcase.uid = #{uid} AND bookcase.type = #{type} and novel.allow != -2
         ORDER BY bookcase_user.level DESC
     </select>
     
@@ -229,7 +265,7 @@
             LEFT JOIN chapter ON novel.recent_chapter_id = chapter.cid
             LEFT JOIN user ON novel.uid = user.uid
             LEFT JOIN label ON novel.lid = label.lid
-        WHERE bookcase.uid = #{uid} AND novel.title LIKE concat('%', #{title}, '%')
+        WHERE bookcase.uid = #{uid} AND novel.title LIKE concat('%', #{title}, '%') and novel.allow != -2
         ORDER BY bookcase_user.level DESC
     </select>
 
@@ -240,17 +276,17 @@
             LEFT JOIN user ON novel.uid = user.uid
             LEFT JOIN label ON novel.lid = label.lid
             RIGHT JOIN record ON  record.nid = novel.nid
-        WHERE record.nid = #{nid} AND record.uid = #{uid}
+        WHERE record.nid = #{nid} AND record.uid = #{uid} and novel.allow != -2
     </select>
 
     <select id="getNotAllowedNovel" resultType="HashMap">
         SELECT novel.*, user.* FROM novel
         INNER JOIN user ON novel.uid = user.uid
-        WHERE novel.allow = 0;
+        WHERE novel.allow = 0 and novel.allow != -2
     </select>
 
     <select id="getEditNovel" resultMap="novelResultMap">
-        SELECT * FROM novel WHERE level = 3 LIMIT 15
+        SELECT * FROM novel WHERE level = 3 and novel.allow != -2 LIMIT 15
     </select>
 
     <select id="getRecommendNovel" resultType="HashMap">
@@ -258,6 +294,7 @@
         LEFT JOIN user ON novel.uid = user.uid
         LEFT JOIN label ON novel.lid = label.lid
         LEFT JOIN chapter ON novel.recent_chapter_id = chapter.cid
+        where novel.allow != -2
         ORDER BY recommend_num DESC
     </select>
 
@@ -266,6 +303,7 @@
         LEFT JOIN user ON novel.uid = user.uid
         LEFT JOIN label ON novel.lid = label.lid
         LEFT JOIN chapter ON novel.recent_chapter_id = chapter.cid
+        where novel.allow != -2
         ORDER BY recommend_num DESC LIMIT 10
     </select>
 
@@ -274,6 +312,7 @@
         LEFT JOIN user ON novel.uid = user.uid
         LEFT JOIN label ON novel.lid = label.lid
         LEFT JOIN chapter ON novel.recent_chapter_id = chapter.cid
+        where novel.allow != -2
         ORDER BY recommend_num DESC LIMIT 15
     </select>
 
@@ -282,7 +321,7 @@
         LEFT JOIN user ON novel.uid = user.uid
         LEFT JOIN label ON novel.lid = label.lid
         LEFT JOIN chapter ON novel.recent_chapter_id = chapter.cid
-        WHERE label.lid = #{lid}
+        WHERE label.lid = #{lid} and novel.allow != -2
         ORDER BY recommend_num DESC
     </select>
 
@@ -291,7 +330,7 @@
         LEFT JOIN user ON novel.uid = user.uid
         LEFT JOIN label ON novel.lid = label.lid
         LEFT JOIN chapter ON novel.recent_chapter_id = chapter.cid
-        WHERE label.lid = #{lid}
+        WHERE label.lid = #{lid} and novel.allow != -2
         ORDER BY recommend_num DESC LIMIT 10
     </select>
 
@@ -300,7 +339,7 @@
         LEFT JOIN user ON novel.uid = user.uid
         LEFT JOIN label ON novel.lid = label.lid
         LEFT JOIN chapter ON novel.recent_chapter_id = chapter.cid
-        WHERE label.lid = #{lid}
+        WHERE label.lid = #{lid} and novel.allow != -2
         ORDER BY recommend_num DESC LIMIT 15
     </select>
 
@@ -309,6 +348,7 @@
         LEFT JOIN user ON novel.uid = user.uid
         LEFT JOIN label ON novel.lid = label.lid
         LEFT JOIN chapter ON novel.recent_chapter_id = chapter.cid
+        where novel.allow != -2
         ORDER BY novel.create_time DESC
     </select>
 
@@ -317,6 +357,7 @@
         LEFT JOIN user ON novel.uid = user.uid
         LEFT JOIN label ON novel.lid = label.lid
         LEFT JOIN chapter ON novel.recent_chapter_id = chapter.cid
+        where novel.allow != -2
         ORDER BY novel.create_time DESC LIMIT 10
     </select>
 
@@ -325,6 +366,7 @@
         LEFT JOIN user ON novel.uid = user.uid
         LEFT JOIN label ON novel.lid = label.lid
         LEFT JOIN chapter ON novel.recent_chapter_id = chapter.cid
+        where novel.allow != -2
         ORDER BY novel.create_time DESC LIMIT 23
     </select>
 
@@ -333,7 +375,7 @@
         LEFT JOIN user ON novel.uid = user.uid
         LEFT JOIN label ON novel.lid = label.lid
         LEFT JOIN chapter ON novel.recent_chapter_id = chapter.cid
-        WHERE label.lid = #{lid}
+        WHERE label.lid = #{lid} and novel.allow != -2
         ORDER BY novel.create_time DESC
     </select>
 
@@ -342,7 +384,7 @@
         LEFT JOIN user ON novel.uid = user.uid
         LEFT JOIN label ON novel.lid = label.lid
         LEFT JOIN chapter ON novel.recent_chapter_id = chapter.cid
-        WHERE label.lid = #{lid}
+        WHERE label.lid = #{lid} and novel.allow != -2
         ORDER BY novel.create_time DESC LIMIT 10
     </select>
 
@@ -351,7 +393,7 @@
         LEFT JOIN user ON novel.uid = user.uid
         LEFT JOIN label ON novel.lid = label.lid
         LEFT JOIN chapter ON novel.recent_chapter_id = chapter.cid
-        WHERE label.lid = #{lid}
+        WHERE label.lid = #{lid} and novel.allow != -2
         ORDER BY novel.create_time DESC LIMIT 23
     </select>
 
@@ -360,6 +402,7 @@
         LEFT JOIN user ON novel.uid = user.uid
         LEFT JOIN label ON novel.lid = label.lid
         LEFT JOIN chapter ON novel.recent_chapter_id = chapter.cid
+        where novel.allow != -2
         ORDER BY score DESC
     </select>
 
@@ -368,6 +411,7 @@
         LEFT JOIN user ON novel.uid = user.uid
         LEFT JOIN label ON novel.lid = label.lid
         LEFT JOIN chapter ON novel.recent_chapter_id = chapter.cid
+        where novel.allow != -2
         ORDER BY score DESC LIMIT 10
     </select>
 
@@ -376,7 +420,7 @@
         LEFT JOIN user ON novel.uid = user.uid
         LEFT JOIN label ON novel.lid = label.lid
         LEFT JOIN chapter ON novel.recent_chapter_id = chapter.cid
-        WHERE label.lid = #{lid}
+        WHERE label.lid = #{lid} and novel.allow != -2
         ORDER BY score DESC
     </select>
 
@@ -385,7 +429,7 @@
         LEFT JOIN user ON novel.uid = user.uid
         LEFT JOIN label ON novel.lid = label.lid
         LEFT JOIN chapter ON novel.recent_chapter_id = chapter.cid
-        WHERE label.lid = #{lid}
+        WHERE label.lid = #{lid} and novel.allow != -2
         ORDER BY score DESC LIMIT 10
     </select>
 
@@ -393,6 +437,7 @@
         SELECT novel.nid, novel.lid, novel.title, novel.info, novel.introduction, novel.click_num, novel.cover, novel.recommend_num, user.uid, novel.score, user.username, label.label_name FROM novel
         LEFT JOIN user ON novel.uid = user.uid
         LEFT JOIN label ON novel.lid = label.lid
+        where novel.allow != -2
         ORDER BY update_time DESC
     </select>
 
@@ -401,7 +446,7 @@
         LEFT JOIN user ON novel.uid = user.uid
         LEFT JOIN label ON novel.lid = label.lid
         LEFT JOIN chapter ON novel.recent_chapter_id = chapter.cid
-        WHERE label.lid = #{lid}
+        WHERE label.lid = #{lid} and novel.allow != -2
         ORDER BY update_time DESC
     </select>
 
@@ -410,7 +455,7 @@
         LEFT JOIN user ON novel.uid = user.uid
         LEFT JOIN label ON novel.lid = label.lid
         LEFT JOIN chapter ON novel.recent_chapter_id = chapter.cid
-        WHERE state = 1
+        WHERE state = 1 and novel.allow != -2
         <if test="active == 0">
             ORDER BY click_num DESC
         </if>
@@ -430,7 +475,7 @@
         LEFT JOIN user ON novel.uid = user.uid
         LEFT JOIN label ON novel.lid = label.lid
         LEFT JOIN chapter ON novel.recent_chapter_id = chapter.cid
-        WHERE state = 1
+        WHERE state = 1 and novel.allow != -2
         ORDER BY click_num DESC LIMIT 10
     </select>
 
@@ -439,7 +484,7 @@
         LEFT JOIN user ON novel.uid = user.uid
         LEFT JOIN label ON novel.lid = label.lid
         LEFT JOIN chapter ON novel.recent_chapter_id = chapter.cid
-        WHERE label.lid = #{lid} AND state = 1
+        WHERE label.lid = #{lid} AND state = 1 and novel.allow != -2
         <if test="active == 0">
             ORDER BY click_num DESC
         </if>
@@ -459,7 +504,7 @@
         LEFT JOIN user ON novel.uid = user.uid
         LEFT JOIN label ON novel.lid = label.lid
         LEFT JOIN chapter ON novel.recent_chapter_id = chapter.cid
-        WHERE label.lid = #{lid} AND state = 1
+        WHERE label.lid = #{lid} AND state = 1 and novel.allow != -2
         ORDER BY click_num DESC LIMIT 10
     </select>
 
@@ -469,6 +514,7 @@
         LEFT JOIN user ON novel.uid = user.uid
         LEFT JOIN label ON novel.lid = label.lid
         LEFT JOIN chapter ON novel.recent_chapter_id = chapter.cid
+        where novel.allow != -2
         ORDER BY click_num DESC
     </select>
 
@@ -478,6 +524,7 @@
         LEFT JOIN user ON novel.uid = user.uid
         LEFT JOIN label ON novel.lid = label.lid
         LEFT JOIN chapter ON novel.recent_chapter_id = chapter.cid
+        where novel.allow != -2
         ORDER BY click_num DESC LIMIT 10
     </select>
 
@@ -487,7 +534,7 @@
         LEFT JOIN user ON novel.uid = user.uid
         LEFT JOIN label ON novel.lid = label.lid
         LEFT JOIN chapter ON novel.recent_chapter_id = chapter.cid
-        WHERE label.lid = #{lid}
+        WHERE label.lid = #{lid} and novel.allow != -2
         ORDER BY click_num DESC
     </select>
 
@@ -497,7 +544,7 @@
         LEFT JOIN user ON novel.uid = user.uid
         LEFT JOIN label ON novel.lid = label.lid
         LEFT JOIN chapter ON novel.recent_chapter_id = chapter.cid
-        WHERE label.lid = #{lid}
+        WHERE label.lid = #{lid} and novel.allow != -2
         ORDER BY click_num DESC LIMIT 10
     </select>
 
@@ -506,6 +553,7 @@
         FROM novel INNER JOIN label ON novel.lid = label.lid
         INNER JOIN user ON novel.uid = user.uid
         LEFT JOIN chapter ON novel.recent_chapter_id = chapter.cid
+        where novel.allow != -2
         ORDER BY collect_num DESC
     </select>
 
@@ -514,6 +562,7 @@
         FROM novel INNER JOIN label ON novel.lid = label.lid
         INNER JOIN user ON novel.uid = user.uid
         LEFT JOIN chapter ON novel.recent_chapter_id = chapter.cid
+        where novel.allow != -2
         ORDER BY collect_num DESC LIMIT 10
     </select>
 
@@ -522,7 +571,7 @@
         FROM novel INNER JOIN label ON novel.lid = label.lid
         INNER JOIN user ON novel.uid = user.uid
         LEFT JOIN chapter ON novel.recent_chapter_id = chapter.cid
-        WHERE label.lid = #{lid}
+        WHERE label.lid = #{lid} and novel.allow != -2
         ORDER BY collect_num DESC
     </select>
 
@@ -531,7 +580,7 @@
         FROM novel INNER JOIN label ON novel.lid = label.lid
         INNER JOIN user ON novel.uid = user.uid
         LEFT JOIN chapter ON novel.recent_chapter_id = chapter.cid
-        WHERE label.lid = #{lid}
+        WHERE label.lid = #{lid} and novel.allow != -2
         ORDER BY collect_num DESC LIMIT 10
     </select>
 
@@ -558,6 +607,14 @@
     <update id="updateUpdateChapter">
         update novel set recent_chapter_id = #{cid} where nid = #{nid}
     </update>
+
+    <update id="updateNovelAllow">
+        update novel set allow = #{allow} where nid = #{nid}
+    </update>
+
+    <delete id="deleteNovelByNid">
+        delete from novel where nid = #{nid}
+    </delete>
 
     <resultMap id="novelResultMap" type="NovelEntity" >
         <id column="nid" property="nid" jdbcType="BIGINT" />

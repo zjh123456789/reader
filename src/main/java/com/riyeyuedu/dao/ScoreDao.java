@@ -42,4 +42,9 @@ public class ScoreDao {
     public Double getAvgScoreByNid(SqlSession sqlSession, Long nid) {
         return sqlSession.selectOne("score.getAvgScoreByNid", nid);
     }
+
+    public boolean deleteScore(SqlSession sqlSession, Long nid) {
+        int deleteNum = sqlSession.delete("score.deleteScore", nid);
+        return deleteNum == 1;
+    }
 }

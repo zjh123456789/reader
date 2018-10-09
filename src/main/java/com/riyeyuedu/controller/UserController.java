@@ -10,10 +10,10 @@ import com.riyeyuedu.entity.UserEntity;
 import com.riyeyuedu.service.BookCaseService;
 import com.riyeyuedu.service.RedisService;
 import com.riyeyuedu.service.UserService;
-import com.riyeyuedu.util.JWTUtil;
+//import com.riyeyuedu.util.JWTUtil;
 import com.riyeyuedu.util.SmsUtil;
-import org.apache.shiro.authz.UnauthorizedException;
-import org.apache.shiro.authz.annotation.RequiresAuthentication;
+//import org.apache.shiro.authz.UnauthorizedException;
+//import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -139,7 +139,7 @@ public class UserController {
 
     @RequestMapping(value = "/user/home", method = RequestMethod.GET)
     @CrossOrigin
-    @RequiresAuthentication
+//    @RequiresAuthentication
     public ResponseEntity getPerson() {
         return new ResponseEntity(200, "you coming", null);
     }
@@ -159,15 +159,14 @@ public class UserController {
                 Map<String, String> map = new HashMap<>();
                 map.put("msg", "Login success");
                 map.put("code", "200");
-                map.put("token", JWTUtil.sign(userEntity.getUsername(), userEntity.getPassword()));
                 map.put("uid", String.valueOf(userEntity.getUid()));
                 map.put("username", userEntity.getUsername());
                 return map;
             } else {
-                throw new UnauthorizedException();
+                return null;
             }
         } else {
-            throw new UnauthorizedException();
+            return null;
         }
     }
 
