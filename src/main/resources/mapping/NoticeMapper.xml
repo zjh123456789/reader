@@ -8,7 +8,15 @@
     </insert>
 
     <select id="getNoticeList" resultMap="noticeResultMap">
-        select * from notice order by #{time} desc
+        select * from notice order by update_time desc
+    </select>
+
+    <select id="getNoticeListL7" resultMap="noticeResultMap">
+        select notice.id, notice.title from notice order by update_time desc
+    </select>
+
+    <select id="getNoticeById" resultMap="noticeResultMap">
+        select * from notice where id = #{id}
     </select>
 
     <delete id="deleteNotice">

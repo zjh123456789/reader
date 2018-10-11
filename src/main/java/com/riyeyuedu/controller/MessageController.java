@@ -6,6 +6,8 @@ import com.riyeyuedu.service.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -22,7 +24,7 @@ public class MessageController {
     @RequestMapping(value = "/addMessage", method = RequestMethod.POST)
     @CrossOrigin
     public ResponseEntity addMessage(@RequestBody MessageEntity messageEntity) {
-        messageEntity.setTime(new Date().getTime());
+        messageEntity.setTime(LocalDateTime.now().toEpochSecond(ZoneOffset.of("+8")));
         messageEntity.setIsRead(0);
         return new ResponseEntity(messageService.addMessage(messageEntity));
     }

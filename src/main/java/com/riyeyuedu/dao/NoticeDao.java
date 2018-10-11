@@ -17,8 +17,16 @@ public class NoticeDao {
         return noticeEntity;
     }
 
-    public List<NoticeEntity> getNoticeList(SqlSession sqlSession, String time) {
-        return sqlSession.selectList("notice.getNoticeList", time);
+    public List<NoticeEntity> getNoticeList(SqlSession sqlSession) {
+        return sqlSession.selectList("notice.getNoticeList");
+    }
+
+    public List<NoticeEntity> getNoticeListL7(SqlSession sqlSession) {
+        return sqlSession.selectList("notice.getNoticeListL7");
+    }
+
+    public  NoticeEntity getNoticeById(SqlSession sqlSession, int id) {
+        return sqlSession.selectOne("notice.getNoticeById", id);
     }
 
     public boolean deleteNotice(SqlSession sqlSession, int id) {

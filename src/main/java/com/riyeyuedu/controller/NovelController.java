@@ -7,6 +7,9 @@ import com.riyeyuedu.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.PublicKey;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -85,6 +88,8 @@ public class NovelController {
     public List<Map<String, Object>> getNovelByRecent() {
         return novelService.getNovelByRecentL23();
     }
+
+
 
     @RequestMapping(value = "/novel/edit")
     @CrossOrigin
@@ -195,7 +200,6 @@ public class NovelController {
     @RequestMapping(value = "/search", method = RequestMethod.GET)
     @CrossOrigin
     public ResponseEntity getNovelByName(@RequestParam("page") int page, @RequestParam("name") String name, @RequestParam("active") int active) {
-        System.out.println(123);
         Page pager = PageHelper.startPage(page, 10);
         Map<String, Object> map = new HashMap<>();
         Map<String, Object> map1 = new HashMap<>();
@@ -209,7 +213,7 @@ public class NovelController {
     @RequestMapping(value = "/score", method = RequestMethod.POST)
     @CrossOrigin
     public ResponseEntity score(@RequestBody ScoreEntity scoreEntity) {
-        scoreEntity.setTime(new Date().getTime());
+        scoreEntity.setTime(LocalDateTime.now().toEpochSecond(ZoneOffset.of("+8")));
         if (scoreService.getScore(scoreEntity) != null) {
             scoreService.updateScore(scoreEntity);
         } else {

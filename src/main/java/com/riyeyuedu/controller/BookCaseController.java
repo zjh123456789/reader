@@ -59,23 +59,17 @@ public class BookCaseController {
         BookCaseEntity bookCase = new BookCaseEntity();
         bookCase.setUid(uid);
         bookCase.setType(type);
-        System.out.println(nid);
-        System.out.println(uid);
-        System.out.println(type);
 
         Long bid = bookCaseService.getBookCase(bookCase).getBid();
 
-        System.out.println(bid);
         Map<String, Object> map = new HashMap<>();
         map.put("bid", bid);
         map.put("nid", nid);
 
         if (bookCaseService.isNovelInBookcase(map) == null) {
-            System.out.println("none");
             bookCaseService.addNovelToBookcase(map);
             return new ResponseEntity("加入成功");
         } else {
-            System.out.println("not none");
             return new ResponseEntity(400, "已存在于书架", null);
         }
     }
@@ -84,17 +78,14 @@ public class BookCaseController {
     @ResponseBody
     @CrossOrigin
     public ResponseEntity getNovelInBookcase(@PathVariable int uid, @PathVariable String type) {
-        System.out.println(uid + ";" + type);
         BookCaseEntity bookCaseEntity = new BookCaseEntity();
         bookCaseEntity.setUid(uid);
         bookCaseEntity.setType(type);
 
         Long bid = bookCaseService.getBookCase(bookCaseEntity).getBid();
-        System.out.println(bid);
 
         Map<String, Object> map = new HashMap<>();
         List<Map<String, Object>> novelMap = novelService.getNovelInBookCase(bookCaseEntity);
-        System.out.println(novelMap);
 
         RecordEntity recordEntity;
 
@@ -106,7 +97,6 @@ public class BookCaseController {
             recordEntity.setUid(uid);
             recordEntity.setNid(nid);
             recordEntity = recordService.getRecord(recordEntity);
-            System.out.println(recordEntity);
 
             if (recordEntity != null) {
                 temp = recordService.getRecordDetail(recordEntity);
@@ -216,7 +206,6 @@ public class BookCaseController {
         bookCaseEntity.setType(type);
 
         Long bid = bookCaseService.getBookCase(bookCaseEntity).getBid();
-        System.out.println(bid);
 
         return new ResponseEntity(bookCaseService.getTopNum(bid));
     }

@@ -137,9 +137,8 @@ public class AdminController {
     public ResponseEntity<?> noticeList(@RequestParam Integer pageNum,
                                         @RequestParam Integer pageSize,
                                         @RequestParam Integer order) {
-        String time = order == 1 ? "create_time" : "update_time";
         PageHelper.startPage(pageNum, pageSize);
-        List<NoticeEntity> list = noticeService.getNoticeList(time);
+        List<NoticeEntity> list = noticeService.getNoticeList();
 
         for (NoticeEntity item : list) {
             item.setContentStr(RichTextUtil.byteToStringWithBr(item.getContent()));

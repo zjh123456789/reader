@@ -33,8 +33,16 @@ public class NoticeService {
         return noticeDao.addNotice(sqlSession, noticeEntity);
     }
 
-    public List<NoticeEntity> getNoticeList(String time) {
-        return noticeDao.getNoticeList(sqlSession, time);
+    public List<NoticeEntity> getNoticeList() {
+        return noticeDao.getNoticeList(sqlSession);
+    }
+
+    public List<NoticeEntity> getNoticeListL7() {
+        return noticeDao.getNoticeListL7(sqlSession);
+    }
+
+    public NoticeEntity getNoticeById(int id) {
+        return noticeDao.getNoticeById(sqlSession, id);
     }
 
     public boolean deleteNotice(int id) {

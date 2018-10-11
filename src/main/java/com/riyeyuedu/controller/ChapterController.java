@@ -31,17 +31,14 @@ public class ChapterController {
     @RequestMapping(value = "/chapter/{cid}", method = RequestMethod.GET)
     @CrossOrigin
     public ResponseEntity getChapter(@PathVariable("cid") Long cid) {
-        //System.out.println("in");
-        //System.out.println(cid);
         Map<String, Object> map = chapterService.getChapterByCid(cid);
-        //System.out.println(map);
+
         Long nid = (Long) map.get("nid");
         Long fcid = chapterService.getFirstChapter(nid).getCid();
         Long lcid = chapterService.getLastChapter(nid).getCid();
         map.put("fcid", fcid);
         map.put("lcid", lcid);
 
-        //System.out.println(map);
 
         return new ResponseEntity(map);
     }
