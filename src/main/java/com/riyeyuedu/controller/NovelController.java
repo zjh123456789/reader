@@ -276,4 +276,10 @@ public class NovelController {
     public  ResponseEntity getNovelInfo(@PathVariable("nid") Long nid) {
         return new ResponseEntity(novelService.getNovelByNid(nid));
     }
+
+    @GetMapping(value = "/authorNovel/{uid}")
+    @CrossOrigin
+    public ResponseEntity getNovelByUid(@PathVariable int uid) {
+        return new ResponseEntity(novelService.getNovelByUid(uid));
+    }
 }

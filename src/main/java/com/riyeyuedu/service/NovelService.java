@@ -252,4 +252,6 @@ public class NovelService {
     public boolean deleteNovelByNid(Integer nid) {
         return novelDao.deleteNovelByNid(sqlSession, nid);
     }
+
+
 }
