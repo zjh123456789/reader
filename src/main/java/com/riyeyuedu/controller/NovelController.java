@@ -214,10 +214,11 @@ public class NovelController {
     @CrossOrigin
     public ResponseEntity score(@RequestBody ScoreEntity scoreEntity) {
         scoreEntity.setTime(LocalDateTime.now().toEpochSecond(ZoneOffset.of("+8")));
+
         if (scoreService.getScore(scoreEntity) != null) {
-            scoreService.updateScore(scoreEntity);
+            scoreEntity = scoreService.updateScore(scoreEntity);
         } else {
-            scoreService.addScore(scoreEntity);
+            scoreEntity = scoreService.addScore(scoreEntity);
         }
 
         Double avg = scoreService.getAvgScoreByNid(scoreEntity.getNid());
@@ -226,7 +227,7 @@ public class NovelController {
         map.put("score", avg);
         novelService.updateScore(map);
 
-        return new ResponseEntity(null);
+        return new ResponseEntity(scoreEntity);
     }
 
     @RequestMapping(value = "/novelScore/{nid}/{page}")

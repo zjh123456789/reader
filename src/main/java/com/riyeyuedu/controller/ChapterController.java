@@ -57,7 +57,7 @@ public class ChapterController {
     }
 
     @RequestMapping(value = "/directory/{nid}", method = RequestMethod.GET)
-    @ResponseBody
+    @CrossOrigin
     public List<ChapterEntity> getDirectoryByNid(@PathVariable("nid") Long nid) {
         return chapterService.getDirectoryByNid(nid);
     }

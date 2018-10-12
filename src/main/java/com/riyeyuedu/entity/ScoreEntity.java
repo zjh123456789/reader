@@ -1,7 +1,7 @@
 package com.riyeyuedu.entity;
 
 public class ScoreEntity {
-    private int uid;
+    private Integer uid;
 
     private Long nid;
 
@@ -13,11 +13,11 @@ public class ScoreEntity {
 
     private Integer likeNum;
 
-    public int getUid() {
+    public Integer getUid() {
         return uid;
     }
 
-    public void setUid(int rid) {
+    public void setUid(Integer uid) {
         this.uid = uid;
     }
 

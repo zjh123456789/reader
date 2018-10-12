@@ -139,7 +139,6 @@ public class UserController {
 
     @RequestMapping(value = "/user/home", method = RequestMethod.GET)
     @CrossOrigin
-//    @RequiresAuthentication
     public ResponseEntity getPerson() {
         return new ResponseEntity(200, "you coming", null);
     }
@@ -196,7 +195,7 @@ public class UserController {
         UserEntity userEntity = new UserEntity();
         userEntity.setUsername(format.getUsername());
         userEntity.setPassword(format.getPassword());
-        userEntity.setPortrait("http://nealcaffrey.oss-cn-beijing.aliyuncs.com/avatar/default.jpg");
+        userEntity.setPortrait("https://nealcaffrey.oss-cn-beijing.aliyuncs.com/avatar/avatar-who.png");
         userEntity.setPhone(format.getPhone());
 
         userService.register(userEntity);

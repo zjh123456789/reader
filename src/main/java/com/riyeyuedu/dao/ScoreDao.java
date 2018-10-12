@@ -9,14 +9,14 @@ import java.util.Map;
 
 @Repository
 public class ScoreDao {
-    public Boolean addScore(SqlSession sqlSession, ScoreEntity scoreEntity) {
-        int addNum = sqlSession.insert("score.insertScore", scoreEntity);
-        return addNum == 1;
+    public ScoreEntity addScore(SqlSession sqlSession, ScoreEntity scoreEntity) {
+        sqlSession.insert("score.insertScore", scoreEntity);
+        return scoreEntity;
     }
 
-    public Boolean updateScore(SqlSession sqlSession, ScoreEntity scoreEntity) {
-        int updateNum = sqlSession.update("score.updateScore", scoreEntity);
-        return updateNum == 1;
+    public ScoreEntity updateScore(SqlSession sqlSession, ScoreEntity scoreEntity) {
+        sqlSession.update("score.updateScore", scoreEntity);
+        return scoreEntity;
     }
 
     public ScoreEntity getScore(SqlSession sqlSession, ScoreEntity scoreEntity) {

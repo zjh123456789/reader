@@ -25,11 +25,11 @@ public class ScoreService {
         this.scoreDao = scoreDao;
     }
 
-    public Boolean addScore(ScoreEntity scoreEntity) {
+    public ScoreEntity addScore(ScoreEntity scoreEntity) {
         return scoreDao.addScore(sqlSession, scoreEntity);
     }
 
-    public Boolean updateScore(ScoreEntity scoreEntity) {
+    public ScoreEntity updateScore(ScoreEntity scoreEntity) {
         return scoreDao.updateScore(sqlSession, scoreEntity);
     }
 
