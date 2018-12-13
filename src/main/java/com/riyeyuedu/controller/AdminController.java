@@ -107,6 +107,8 @@ public class AdminController {
     @GetMapping(value = "/auditChapter")
     public ResponseEntity<?> auditChapter(@RequestParam Long cid,
                                           @RequestParam Integer allow) {
+        Long nid = (Long) chapterService.getChapterByCid(cid).get("nid");
+        novelService.addChapterNum(nid);
         return ResponseEntity.ok(chapterService.updateChapterAllow(cid, allow));
     }
 

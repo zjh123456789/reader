@@ -34,6 +34,13 @@ public class NovelController {
         this.scoreService = scoreService;
     }
 
+    @RequestMapping("/novel/select")
+    @CrossOrigin
+    public ResponseEntity selectNovel(NovelEntity novelEntity) {
+        System.out.println(novelEntity.getConstraint());
+        return new ResponseEntity(novelService.select(novelEntity));
+    }
+
     @RequestMapping(method = RequestMethod.GET, path = "/")
     @CrossOrigin
     public Map<String, List<Map<String, Object>>> getAllNovel() {
@@ -55,7 +62,6 @@ public class NovelController {
     @RequestMapping(value = "/novel/complete", method = RequestMethod.GET)
     @CrossOrigin
     public List<Map<String, Object>> getCompleteNovel() {
-
         return novelService.getNovelByStateL10(1);
     }
 

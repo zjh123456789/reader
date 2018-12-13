@@ -41,6 +41,16 @@ public class NovelEntity {
 
     private int level;
 
+    public String getConstraint() {
+        return constraint;
+    }
+
+    public void setConstraint(String constraint) {
+        this.constraint = constraint;
+    }
+
+    private String constraint;
+
     public Long getNid() {
         return nid;
     }

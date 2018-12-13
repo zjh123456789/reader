@@ -12,7 +12,7 @@
 
     <select id="getAllRecordDetail" resultType="HashMap">
         SELECT record.nid, chapter.cid AS record_cid, chapter.chapter_name AS record_chapter_name FROM chapter
-            RIGHT JOIN record ON record.cid = chapter.cid
+            left JOIN record ON record.cid = chapter.cid
         WHERE record.uid = #{uid}
     </select>
 

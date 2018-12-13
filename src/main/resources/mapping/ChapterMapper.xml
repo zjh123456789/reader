@@ -8,8 +8,8 @@
     </insert>
     
     <insert id="insertDraft" parameterType="ChapterEntity" useGeneratedKeys="true" keyProperty="cid">
-        INSERT INTO chapter (nid, chapter_name, draft, create_time, word_num, allow, is_draft)
-        VALUES (#{nid}, #{chapterName}, #{draft}, #{createTime}, #{wordNum}, #{allow}, #{isDraft})
+        INSERT INTO chapter (nid, chapter_name, draft, create_time, word_num, is_draft)
+        VALUES (#{nid}, #{chapterName}, #{draft}, #{createTime}, #{wordNum}, #{isDraft})
     </insert>
 
     <select id="getDirectoryByNid" resultMap="chapterResultMap">
@@ -97,7 +97,7 @@
     </update>
 
     <update id="updateContent">
-        update chapter set content = #{content}, allow = 1 where cid = #{cid}
+        update chapter set content = #{content}, allow = 0 where cid = #{cid}
     </update>
 
     <update id="deleteDraft">

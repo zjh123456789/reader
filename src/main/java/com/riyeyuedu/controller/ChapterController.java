@@ -39,7 +39,6 @@ public class ChapterController {
         map.put("fcid", fcid);
         map.put("lcid", lcid);
 
-
         return new ResponseEntity(map);
     }
 

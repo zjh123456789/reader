@@ -46,6 +46,7 @@ public class ChapterService {
     }
 
     public ChapterEntity getChapterInfoByCid(Long cid) {
+
         return chapterDao.getChapterInfoByCid(sqlSession, cid);
     }
 

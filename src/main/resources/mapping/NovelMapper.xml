@@ -7,6 +7,28 @@
         VALUES (#{title}, #{uid}, #{lid}, #{introduction}, #{info}, #{score}, #{state}, #{createTime}, #{updateTime}, #{wordNum}, #{clickNum}, #{recommendNum}, #{chapterNum}, #{collectNum}, #{cover}, #{recentChapterId}, #{allow})
     </insert>
 
+    <select id="select" resultMap="novelResultMap">
+        select * from novel
+        <where>
+            <if test="lid != null">
+                lid = #{lid}
+            </if>
+        </where>
+        <if test="constraint == 'recommend_num'">
+            order by recommend_num desc
+        </if>
+        <if test="constraint == 'click_num'">
+            order by click_num desc
+        </if>
+        <if test="constraint == 'collect_Num'">
+            order by collect_Num desc
+        </if>
+        <if test="constraint == 'score'">
+            order by score desc
+        </if>
+        limit 20
+    </select>
+
     <select id="getNovelList" resultType="HashMap">
         select novel.nid, novel.title, novel.update_time, novel.create_time, novel.state, novel.recent_chapter_id, novel.allow, user.username, user.uid, label.*, chapter.cid, chapter.chapter_name from novel
         LEFT JOIN label ON novel.lid = label.lid

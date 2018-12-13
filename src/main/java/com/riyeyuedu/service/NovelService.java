@@ -31,6 +31,10 @@ public class NovelService {
         this.novelDao = novelDao;
     }
 
+    public List<NovelEntity> select(NovelEntity novelEntity) {
+        return novelDao.selectNovel(sqlSession, novelEntity);
+    }
+
     public boolean addNovel(NovelEntity novel) {
         return novelDao.addNovel(sqlSession, novel);
     }

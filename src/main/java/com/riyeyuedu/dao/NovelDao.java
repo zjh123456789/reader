@@ -19,6 +19,10 @@ import java.util.Map;
 @Repository
 public class NovelDao {
 
+    public List<NovelEntity> selectNovel(SqlSession sqlSession, NovelEntity novelEntity) {
+        return sqlSession.selectList("novel.select", novelEntity);
+    }
+
     public boolean addNovel(SqlSession sqlSession, NovelEntity novel) {
         int insertNum = sqlSession.insert("novel.insertNovel", novel);
         return insertNum == 1;

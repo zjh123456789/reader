@@ -74,16 +74,14 @@ public class AuthorController {
 
         novelService.updateUpdateTime(date, chapterEntity.getNid());
 
-        //未写后台，上传的章节暂时默认为通过审核
-        chapterEntity.setAllow(1);
         if (chapterEntity.getCid() != null) {
             int wordNum = chapterEntity.getWordNum() - chapterService.getChapterNum(chapterEntity.getCid());
             novelService.updateWordNum(wordNum, chapterEntity.getNid());
             chapterService.updateContent(chapterEntity);
             return new ResponseEntity(200, "success", true);
         } else {
+            chapterEntity.setAllow(0);
             chapterService.addChapter(chapterEntity);
-            novelService.addChapterNum(chapterEntity.getNid());
             novelService.updateUpdateChapter(chapterEntity.getCid(), chapterEntity.getNid());
             return new ResponseEntity(200, "success", chapterEntity.getCid());
         }
@@ -95,7 +93,7 @@ public class AuthorController {
 
         chapterEntity.setCreateTime(new Date().getTime());
         chapterEntity.setWordNum(chapterEntity.getDraft().length());
-        chapterEntity.setAllow(0);
+//        chapterEntity.setAllow(0);
         chapterEntity.setIsDraft(1);
 
         if (chapterEntity.getCid() != null) {
@@ -123,7 +121,6 @@ public class AuthorController {
     @CrossOrigin
     public ResponseEntity deleteDraft(@PathVariable("cid") Long cid) {
         chapterService.deleteDraft(cid);
-
         return new ResponseEntity(200, "success", true);
     }
 
